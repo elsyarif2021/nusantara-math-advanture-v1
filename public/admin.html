@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Pantau permainan · Nusantara Math Adventure</title>
+<link rel="icon" href="/compass.png">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/admin.css">
+<script type="module" src="/admin.js"></script>
+<script type="module" src="/admin-quizzes.js"></script>
+<script type="module" src="/admin-audio.js"></script>
+</head>
+<body>
+<header class="top"><div class="shell top-inner">
+  <a class="brand" href="/"><span class="brand-icon" aria-hidden="true">✦</span><span>Nusantara <b>Math Adventure</b></span></a>
+  <nav aria-label="Navigasi admin"><a class="nav-map" href="/">Permainan</a><a class="nav-cert" href="/signout-with-chatgpt?return_to=%2Fadmin" target="_top">Keluar admin</a></nav>
+</div></header>
+<main class="shell admin-dashboard">
+  <div class="eyebrow">DASHBOARD ADMIN</div>
+  <h1>Pantau permainan</h1>
+  <a class="button teal" href="#kelola-kuis">Kelola Kuis</a>
+  <a class="button soft" href="#pengaturan-audio">Pengaturan Audio</a>
+  <div class="admin-summary" aria-label="Ringkasan progres">
+    <div><span>Pemain terdaftar</span><strong id="total-players">—</strong></div>
+    <div><span>Pos ditaklukkan</span><strong id="total-stations">—</strong></div>
+    <div><span>Final Boss selesai</span><strong id="total-completed">—</strong></div>
+  </div>
+  <section class="admin-panel" aria-labelledby="player-list-title">
+    <div class="admin-panel-head"><h2 id="player-list-title">Progres pemain</h2><button class="button soft" id="refresh" type="button">Muat ulang</button></div>
+    <form id="filters" class="admin-filters">
+      <label for="search-player">Cari nama<input id="search-player" type="search" maxlength="90"></label>
+      <label for="class-filter">Kelas<select id="class-filter"><option value="">Semua kelas</option></select></label>
+      <button class="button teal" type="submit">Tampilkan</button>
+    </form>
+    <p id="admin-status" class="admin-status" role="status">Memuat data…</p>
+    <div class="admin-table-wrap">
+      <table>
+        <thead><tr><th scope="col">Pemain</th><th scope="col">Kelas</th><th scope="col">Pos selesai</th><th scope="col">Final Boss</th><th scope="col">Aktivitas terakhir (WIB)</th></tr></thead>
+        <tbody id="player-rows"></tbody>
+      </table>
+    </div>
+    <div class="admin-pagination" aria-label="Halaman hasil" hidden>
+      <button class="button soft" id="previous-page" type="button">Sebelumnya</button>
+      <span id="page-status"></span>
+      <button class="button soft" id="next-page" type="button">Berikutnya</button>
+    </div>
+  </section>
+  <section class="admin-panel activity-panel" aria-labelledby="activity-title" id="catatan">
+    <div class="admin-panel-head">
+      <h2 id="activity-title">Spreadsheet aktivitas</h2>
+      <a class="button teal admin-download" href="/api/admin/activity.csv" download>Unduh CSV</a>
+    </div>
+    <p id="activity-status" class="admin-status" role="status">Memuat catatan…</p>
+    <div class="admin-table-wrap">
+      <table>
+        <thead><tr><th scope="col">Waktu (WIB)</th><th scope="col">Nama pemain</th><th scope="col">Kelas</th><th scope="col">Aktivitas</th><th scope="col">Pos</th></tr></thead>
+        <tbody id="activity-rows"></tbody>
+      </table>
+    </div>
+    <div class="admin-pagination" aria-label="Halaman aktivitas" hidden>
+      <button class="button soft" id="previous-activity" type="button">Sebelumnya</button>
+      <span id="activity-page-status"></span>
+      <button class="button soft" id="next-activity" type="button">Berikutnya</button>
+    </div>
+  </section>
+  <section class="admin-panel activity-panel" id="kelola-kuis" aria-labelledby="quiz-admin-title">
+    <div class="admin-panel-head">
+      <h2 id="quiz-admin-title">Kelola Kuis</h2>
+      <button class="button teal" id="quiz-new" type="button">Tambah Kuis</button>
+    </div>
+    <p id="quiz-admin-status" role="status"></p>
+    <ul id="quiz-admin-list" class="quiz-list"></ul>
+    <form id="quiz-editor" hidden>
+      <h3 id="quiz-editor-title">Kuis baru</h3>
+      <label>Judul kuis<input id="quiz-title" maxlength="100" required></label>
+      <label>Kelas / level
+        <select id="quiz-grade" required>
+          <option value="">Pilih kelas</option>
+          <option value="1">Kelas 1 · Level 1 · Fase A</option><option value="2">Kelas 2 · Level 2 · Fase A</option>
+          <option value="3">Kelas 3 · Level 3 · Fase B</option><option value="4">Kelas 4 · Level 4 · Fase B</option>
+          <option value="5">Kelas 5 · Level 5 · Fase C</option><option value="6">Kelas 6 · Level 6 · Fase C</option>
+        </select>
+      </label>
+      <fieldset class="quiz-story-fields">
+        <legend>Cerita pembuka (opsional)</legend>
+        <label>Teks cerita<textarea id="quiz-story" rows="3" maxlength="3000"></textarea></label>
+        <label>URL video YouTube<input id="quiz-youtube" type="url" maxlength="600" placeholder="https://www.youtube.com/watch?v=…"></label>
+      <div class="admin-upload" id="legacy-story-image" hidden>
+        <p>Gambar pembuka lama</p>
+        <input id="quiz-image" type="file" data-kind="image" hidden>
+        <a id="quiz-image-saved" target="_blank" rel="noopener" hidden>Buka gambar</a>
+        <button class="button soft" id="quiz-image-remove" type="button" hidden>Lepas gambar pembuka</button>
+      </div>
+      <div class="admin-upload">
+        <label for="quiz-video">Video · MP4, WebM · maks. 25 MB <input id="quiz-video" type="file" data-kind="video" accept=".mp4,.webm"></label>
+        <a id="quiz-video-saved" target="_blank" rel="noopener" hidden>Buka berkas tersimpan</a>
+        <button class="button soft" id="quiz-video-remove" type="button" hidden>Lepas berkas</button>
+      </div>
+      <div class="admin-upload">
+        <label for="quiz-audio">Suara narasi · MP3, WAV, M4A, OGG · maks. 10 MB <input id="quiz-audio" type="file" data-kind="audio" accept=".mp3,.wav,.m4a,.ogg"></label>
+        <a id="quiz-audio-saved" target="_blank" rel="noopener" hidden>Buka berkas tersimpan</a>
+        <button class="button soft" id="quiz-audio-remove" type="button" hidden>Lepas berkas</button>
+      </div>
+      </fieldset>
+      <div id="quiz-questions"></div>
+      <div class="actions">
+        <button class="button soft" id="quiz-add-question" type="button">Tambah soal</button>
+        <label class="quiz-check"><input id="quiz-published" type="checkbox"> Tampilkan ke pemain</label>
+      </div>
+      <div class="actions">
+        <button class="button teal" id="quiz-save" type="submit">Simpan kuis</button>
+        <button class="button soft" id="quiz-cancel" type="button">Batal</button>
+      </div>
+      <p id="quiz-form-status" role="status"></p>
+    </form>
+  </section>
+  <section class="admin-panel activity-panel" id="pengaturan-audio" aria-labelledby="audio-admin-title">
+    <h2 id="audio-admin-title">Pengaturan Audio</h2>
+    <p class="admin-status">Berlaku untuk semua pemain saat membuka permainan. Pemain masih bisa membisukan suara di perangkatnya.</p>
+    <form id="audio-settings-form">
+      <fieldset id="audio-settings-fields" disabled>
+        <legend>Audio permainan</legend>
+        <div class="audio-control">
+          <label><input id="music-enabled" type="checkbox"> Aktifkan musik latar</label>
+          <label class="audio-volume" for="music-volume">Volume musik <output id="music-value" for="music-volume">28%</output></label>
+          <input id="music-volume" type="range" min="0" max="100" value="28" aria-label="Volume musik">
+          <button class="button soft" id="preview-music" type="button">Dengarkan musik</button>
+        </div>
+        <div class="audio-control">
+          <label><input id="voice-enabled" type="checkbox"> Aktifkan suara komentator</label>
+          <label class="audio-volume" for="voice-volume">Volume komentator <output id="voice-value" for="voice-volume">100%</output></label>
+          <input id="voice-volume" type="range" min="0" max="100" value="100" aria-label="Volume komentator">
+          <div class="audio-voice-options">
+            <label for="voice-profile">Pilihan suara <select id="voice-profile"></select></label>
+            <label for="voice-tone">Tone suara <select id="voice-tone"></select></label>
+          </div>
+          <fieldset id="commentator-uploads">
+            <legend>Suara dari perangkat</legend>
+            <p>MP3, WAV, M4A, atau OGG. Maksimal 10 MB per berkas. Jika satu rekaman belum diunggah, komentar itu memakai suara asli.</p>
+      <div class="admin-upload">
+        <label for="voice-right-upload">Rekaman jawaban benar <input id="voice-right-upload" type="file" data-kind="audio" accept=".mp3,.wav,.m4a,.ogg"></label>
+        <a id="voice-right-upload-saved" target="_blank" rel="noopener" hidden>Buka berkas tersimpan</a>
+        <button class="button soft" id="voice-right-upload-remove" type="button" hidden>Lepas berkas</button>
+      </div>
+      <div class="admin-upload">
+        <label for="voice-retry-upload">Rekaman jawaban salah <input id="voice-retry-upload" type="file" data-kind="audio" accept=".mp3,.wav,.m4a,.ogg"></label>
+        <a id="voice-retry-upload-saved" target="_blank" rel="noopener" hidden>Buka berkas tersimpan</a>
+        <button class="button soft" id="voice-retry-upload-remove" type="button" hidden>Lepas berkas</button>
+      </div>
+          </fieldset>
+          <div class="actions">
+            <button class="button soft" id="preview-correct" type="button">Contoh jawaban benar</button>
+            <button class="button soft" id="preview-retry" type="button">Contoh jawaban salah</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="button teal" id="audio-save" type="submit">Simpan pengaturan</button>
+          <button class="button soft" id="audio-stop" type="button" disabled>Hentikan pratinjau</button>
+        </div>
+      </fieldset>
+      <div class="actions">
+        <button class="button soft" id="audio-reload" type="button" hidden>Muat ulang pengaturan</button>
+      </div>
+      <p id="audio-status" class="admin-status" role="status">Memuat pengaturan audio…</p>
+    </form>
+  </section>
+</main>
+</body>
+</html>

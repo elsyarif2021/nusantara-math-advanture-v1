@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#075659">
+<meta name="description" content="Jelajahi Nusantara dari Sabang sampai Merauke sambil belajar Matematika SD kelas 1–6.">
+<link rel="icon" href="compass.png">
+<link rel="stylesheet" href="style.css">
+<title>Nusantara Math Adventure</title>
+</head>
+<body>
+<main class="opening" id="opening" aria-labelledby="opening-title">
+  <button class="opening-sound" id="entry-sound-toggle" data-sound-toggle type="button" aria-label="Suara" aria-pressed="true">Suara aktif</button>
+  <a class="opening-admin" href="/admin" target="_blank" rel="noopener">Admin</a>
+  <div class="opening-copy shell">
+    <div class="eyebrow opening-brand"><span aria-hidden="true">✦</span> NUSANTARA MATH ADVENTURE</div>
+    <h1 id="opening-title">Misi Sabang<br>Sampai Merauke</h1>
+    <p>Berlayar dari pulau ke pulau dan taklukkan misi Matematika sesuai kelasmu.</p>
+    <button class="button gold" id="enter-adventure" type="button">Masuk <span aria-hidden="true">→</span></button>
+  </div>
+</main>
+<audio id="entry-sound" src="/sail-in.wav" preload="auto"></audio>
+<audio id="adventure-music" src="/adventure-music.mp3" preload="auto" loop></audio>
+<audio id="answer-voice" preload="auto"></audio>
+<div id="adventure" hidden>
+<a class="skip" href="#peta">Langsung ke peta</a>
+<header class="top"><div class="shell top-inner">
+  <a class="brand" href="#" aria-label="Nusantara Math Adventure, beranda"><span class="brand-icon" aria-hidden="true">✦</span><span>Nusantara <b>Math Adventure</b></span></a>
+  <nav aria-label="Navigasi utama"><a class="nav-map" href="#peta">Peta Misi</a><button class="nav-cert" id="open-certificate" type="button"><span aria-hidden="true">♜</span> Sertifikat</button><button class="nav-cert" id="open-quizzes" type="button">Kuis</button><button class="nav-profile" id="open-profile" type="button">Profil</button></nav>
+</div></header>
+<main class="shell">
+  <section id="peta" class="route" aria-labelledby="map-title">
+    <div class="map-toolbar">
+      <p class="map-greeting" id="greeting" aria-live="polite" hidden></p>
+      <button class="game-sound" data-sound-toggle type="button" aria-label="Suara" aria-pressed="true">Suara aktif</button>
+    </div>
+    <div class="route-title"><div><h1 id="map-title" tabindex="-1">Peta Petualangan</h1><p id="level-banner" class="level-banner" hidden></p><p>Pilih pos di peta untuk memulai misi perkalianmu.</p></div><div class="route-pill"><span aria-hidden="true">✦</span> <span id="map-count">0 dari 7 pos selesai</span></div></div>
+    <div class="dashboard">
+      <div class="map-frame">
+        <div class="map-scroller"><div class="map-board" id="map-board">
+          <img class="land" src="indonesia.webp" alt="" width="1440" height="600">
+          <canvas id="route-lines" aria-hidden="true"></canvas>
+          <span class="map-caption map-west">SABANG</span><span class="map-caption map-east">MERAUKE</span>
+          <span class="rose" aria-hidden="true"><b>U</b>✧</span>
+          <div id="map-pins"></div><span id="ship" class="ship" aria-hidden="true">⛵</span>
+        </div></div>
+        <div class="map-key"><span><i class="key-here"></i> Pos aktif</span><span><i class="key-complete"></i> Selesai</span><span><i class="key-lock"></i> Terkunci</span><a href="https://geojson-maps.kyd.au/countries/IDN" target="_blank" rel="noopener">Peta Natural Earth ↗</a></div>
+      </div>
+      <aside class="progress-card" aria-labelledby="progress-title">
+        <div class="eyebrow"><span aria-hidden="true">✦</span> JURNAL PELAYARAN</div>
+        <h3 id="progress-title">Progresmu</h3>
+        <div class="progress-text"><b id="progress-count">0/7</b> <span>pos ditaklukkan</span></div>
+        <progress id="progress-bar" max="7" value="0" aria-label="Jumlah pos selesai"></progress>
+        <div class="current"><span class="current-icon" id="current-icon" aria-hidden="true">🪀</span><div><small id="current-status">POS PERTAMA</small><strong id="current-name">Sumatra</strong><span id="current-detail">Gasing Tradisional</span></div></div>
+        <button type="button" class="button teal" id="current-button">Buka pos pertama <span aria-hidden="true">→</span></button>
+      </aside>
+    </div>
+  </section>
+  <section class="stops" aria-labelledby="stops-title"><h2 id="stops-title">Pos Misi</h2><div id="stop-list" class="stop-list"></div></section>
+</main>
+<footer class="shell footer"><span>Nusantara Math Adventure</span><a href="/admin" target="_blank" rel="noopener">Admin</a></footer>
+</div>
+<dialog id="game-dialog" aria-labelledby="dialog-title">
+  <div class="dialog-wrap">
+    <div class="dialog-controls">
+      <button class="close" type="button" aria-label="Tutup" id="close-dialog">
+        <span class="dialog-close-icon" aria-hidden="true">×</span><span class="dialog-map-label" aria-hidden="true">← Peta</span>
+      </button>
+      <button class="game-sound dialog-sound" data-sound-toggle type="button" aria-label="Suara" aria-pressed="true">Suara aktif</button>
+    </div>
+    <div id="game-content"></div>
+  </div>
+</dialog>
+<section id="print-certificate" aria-label="Sertifikat cetak"></section>
+<script type="module" src="app.js"></script>
+</body>
+</html>

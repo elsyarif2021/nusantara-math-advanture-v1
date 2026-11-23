@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1794492240000,
+      "tag": "0000_player_progress",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1794751200000,
+      "tag": "0001_custom_quizzes",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1794751300000,
+      "tag": "0002_player_grade",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1794834000000,
+      "tag": "0003_game_audio_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1794835000000,
+      "tag": "0004_commentator_voice_and_tone",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1794836000000,
+      "tag": "0005_class_quiz_and_media",
+      "breakpoints": true
+    }
+  ]
+}
